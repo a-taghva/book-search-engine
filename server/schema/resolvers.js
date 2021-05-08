@@ -1,7 +1,11 @@
+const { User} = require('../models')
+
 const resolvers = {
   Query: {
-    helloWorld: () => {
-      return 'Hello World';
+    me: async () => {
+      return User.find()
     }
   }
-}
+};
+
+module.exports = resolvers;
