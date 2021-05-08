@@ -42,6 +42,24 @@ const resolvers = {
 
       return { token, user };
     },
+
+    saveBook: async (parent, params, { user }) => {
+      if (!user) {
+        return new AuthenticationError('You need to be logged in!!')
+      }
+
+      try {
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: user._id },
+          { $addToSet: { savedBooks: params } },
+          { new: true, runValidators: true }
+        );
+
+        return updatedUser;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   }
 };
 
