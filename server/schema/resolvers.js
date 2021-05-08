@@ -60,6 +60,24 @@ const resolvers = {
         console.log(err);
       }
     },
+
+    removeBook: async (parent, { bookId }, { user }) => {
+      if (!user) {
+        return new AuthenticationError('You need to be logged in!');
+      }
+
+      try {
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: user._id },
+          { $pull: { savedBooks: { bookId: bookId } } },
+          { new: true, runValidators: true }
+        );
+
+        return updatedUser;
+      } catch (e) {
+        console.error(e);
+      }
+    }
   }
 };
 
